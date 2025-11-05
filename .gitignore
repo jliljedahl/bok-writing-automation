@@ -1,0 +1,24 @@
+# Book projects (user-specific)
+books/*/
+
+# Keep books directory structure but not content
+!books/.gitkeep
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.bak
+
+# Logs
+*.log
+
