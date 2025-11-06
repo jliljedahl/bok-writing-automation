@@ -208,6 +208,8 @@ noir-system/
 │   └── phase4-qa.md          # Kvalitetssäkring
 ├── books/                     # Bokprojekt
 │   └── [book-name]/
+│       ├── data.json         # Projektdata (outline, kapitel, etc)
+│       ├── dashboard.html    # Projektspecifik dashboard
 │       ├── plot/             # Plotdokumentation
 │       ├── characters/       # Karaktärsprofiler
 │       ├── research/         # Research-material
@@ -222,7 +224,18 @@ noir-system/
 │           ├── continuity.md
 │           ├── timeline.md
 │           └── tension-graph.md
+├── web/                       # Web Dashboard
+│   ├── dashboard.html        # Dashboard template
+│   ├── data-template.json    # Data template
+│   ├── update_dashboard.py   # Python API
+│   ├── dashboard-loader.js   # JavaScript loader
+│   ├── demo_populate.py      # Demo generator
+│   └── README.md             # Web docs
 └── docs/                      # Dokumentation
+    ├── quality-gates.md      # Kvalitetsgrindar per fas
+    ├── pilot-chapter-system.md  # Testa på 3 kapitel först
+    ├── agent-calibration-guide.md # Justera agents
+    ├── chapter-structure-guide.md # Val av kapitelstruktur
     ├── agent-guide.md        # Guide för att använda agenter
     ├── svenska-deckare.md    # Svensk deckartradition
     └── best-practices.md     # Best practices
@@ -268,6 +281,77 @@ För varje kapitel:
 ### 4. Publicera
 
 Sammanställ alla FINAL-kapitel till färdig bok!
+
+## 🌐 Web Dashboard
+
+NOIR inkluderar ett interaktivt web dashboard för att följa bokprojektets framsteg i realtid.
+
+### Funktioner
+
+- **📊 Progress Tracking:** Total framgång, kapitel klara, ordantal, kvalitetspoäng
+- **📋 Outline Viewer:** Berättelsens struktur, akter, plot beats
+- **👥 Character Profiles:** Alla karaktärer med arcs, ghost, want, need
+- **📖 Chapter Viewer:** Kapitel-för-kapitel med versionshantering (Draft v1, v2, FINAL)
+- **🔄 Version Control:** Växla mellan olika versioner av varje kapitel
+- **📈 Quality Metrics:** Se kvalitetspoäng, faktaverifiering, kontinuitet per kapitel
+
+### Snabbstart
+
+```bash
+# Skapa nytt projekt med dashboard
+cd web
+python update_dashboard.py mitt-projekt init
+
+# Öppna dashboard i webbläsare
+open ../books/mitt-projekt/dashboard.html
+```
+
+### Uppdatera Dashboard
+
+Dashboard uppdateras automatiskt när agenter arbetar:
+
+```python
+from web.update_dashboard import DashboardUpdater
+
+updater = DashboardUpdater("mitt-projekt")
+
+# Uppdatera kapitel
+updater.update_chapter(
+    chapter_number=1,
+    version_name="Draft v1",
+    text="Kapiteltext...",
+    metadata={"author": "Sage", "quality": 7.5}
+)
+
+# Uppdatera outline
+updater.update_outline(outline_data)
+
+# Uppdatera karaktärer
+updater.update_characters(characters_list)
+
+# Sätt aktuell fas
+updater.set_phase("Fas 2: Writing")
+```
+
+### Demo
+
+Se exempel-dashboard med komplett data:
+
+```bash
+cd web
+python demo_populate.py
+
+# Öppna demo
+open ../books/demo-projekt/dashboard.html
+```
+
+Demo-projektet "Skuggornas Stad" visar:
+- Komplett outline med 3 akter
+- 3 karaktärer med djupa profiler
+- 2 kapitel med versionshantering
+- Progress tracking och kvalitetsmetriker
+
+Se `web/README.md` för fullständig dokumentation.
 
 ## 🎯 Kvalitetsmål
 
