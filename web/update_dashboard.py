@@ -50,29 +50,21 @@ class DashboardUpdater:
 
     def generate_dashboard(self):
         """Generera dashboard HTML med projektdata."""
-        data = self.load_data()
+        # Data sparas redan i data.json via save_data()
+        # Dashboard.html laddar den via fetch('data.json')
 
-        # Läs dashboard template
+        # Kopiera dashboard template till projektmappen
         template_file = self.web_dir / "dashboard.html"
-        with open(template_file, 'r', encoding='utf-8') as f:
-            html = f.read()
-
-        # Injicera data i HTML (ersätt bookData)
-        data_json = json.dumps(data, ensure_ascii=False, indent=2)
-
-        # Hitta och ersätt bookData initialization
-        import re
-        pattern = r'let bookData = \{[^}]+\};'
-        replacement = f'let bookData = {data_json};'
-        html = re.sub(pattern, replacement, html, flags=re.DOTALL)
-
-        # Spara projektspecifik dashboard
         output_file = self.project_dir / "dashboard.html"
-        with open(output_file, 'w', encoding='utf-8') as f:
-            f.write(html)
+
+        shutil.copy(template_file, output_file)
 
         print(f"✅ Dashboard genererad: {output_file}")
         print(f"📂 Öppna i webbläsare: file://{output_file.absolute()}")
+        print(f"⚠️  OBS: Använd lokal webbserver för bästa resultat:")
+        print(f"   cd {self.project_dir}")
+        print(f"   python3 -m http.server 8000")
+        print(f"   Öppna: http://localhost:8000/dashboard.html")
 
         return output_file
 
