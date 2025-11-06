@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOIR Book System - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #e94560;
+            --text: #eaeaea;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --muted: #95a5a6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--highlight), #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h2 {
+            color: var(--highlight);
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: var(--text);
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 1.1em;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            background: var(--accent);
+            color: var(--text);
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .tab:hover {
+            background: var(--highlight);
+            transform: translateY(-2px);
+        }
+
+        .tab.active {
+            background: var(--highlight);
+            border-color: var(--text);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--highlight);
+            box-shadow: 0 5px 20px rgba(233, 69, 96, 0.3);
+        }
+
+        .progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .progress-card {
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-card h3 {
+            font-size: 1em;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+
+        .progress-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success), var(--highlight));
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .chapter-item {
+            background: var(--accent);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .chapter-item:hover {
+            background: var(--highlight);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
+        }
+
+        .chapter-item.completed {
+            border-color: var(--success);
+        }
+
+        .chapter-item.in-progress {
+            border-color: var(--warning);
+        }
+
+        .chapter-item.pending {
+            border-color: var(--muted);
+            opacity: 0.7;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .status-completed {
+            background: var(--success);
+            color: white;
+        }
+
+        .status-in-progress {
+            background: var(--warning);
+            color: white;
+        }
+
+        .status-pending {
+            background: var(--muted);
+            color: white;
+        }
+
+        .character-card {
+            background: var(--accent);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .character-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .character-name {
+            font-size: 1.5em;
+            color: var(--highlight);
+        }
+
+        .character-role {
+            background: var(--secondary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .version-selector {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .version-btn {
+            background: var(--secondary);
+            color: var(--text);
+            padding: 10px 20px;
+            border: 2px solid var(--accent);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .version-btn:hover {
+            background: var(--accent);
+            border-color: var(--highlight);
+        }
+
+        .version-btn.active {
+            background: var(--highlight);
+            border-color: var(--text);
+        }
+
+        .chapter-text {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            border-radius: 10px;
+            line-height: 1.8;
+            font-size: 1.1em;
+            white-space: pre-wrap;
+            font-family: 'Georgia', serif;
+        }
+
+        .metadata {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .metadata-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .metadata-label {
+            color: var(--muted);
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .metadata-value {
+            color: var(--text);
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .outline-section {
+            margin-bottom: 30px;
+        }
+
+        .act-section {
+            background: var(--accent);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--highlight);
+        }
+
+        .act-title {
+            color: var(--highlight);
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .beat-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--success);
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid;
+        }
+
+        .alert-info {
+            background: rgba(52, 152, 219, 0.2);
+            border-color: #3498db;
+        }
+
+        .alert-warning {
+            background: rgba(243, 156, 18, 0.2);
+            border-color: var(--warning);
+        }
+
+        .alert-success {
+            background: rgba(46, 204, 113, 0.2);
+            border-color: var(--success);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--secondary);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 2px solid var(--accent);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #c0392b;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab {
+                width: 100%;
+            }
+
+            .chapter-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 NOIR Book System</h1>
+            <p class="subtitle">Novel Orchestration & Intelligent Rendering</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('overview')">📊 Översikt</button>
+            <button class="tab" onclick="showTab('outline')">📋 Outline</button>
+            <button class="tab" onclick="showTab('characters')">👥 Karaktärer</button>
+            <button class="tab" onclick="showTab('chapters')">📖 Kapitel</button>
+        </div>
+
+        <!-- OVERVIEW TAB -->
+        <div id="overview" class="tab-content active">
+            <div class="progress-grid">
+                <div class="progress-card">
+                    <h3>Total Progress</h3>
+                    <div class="value" id="total-progress">0%</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 0%">0%</div>
+                    </div>
+                </div>
+                <div class="progress-card">
+                    <h3>Kapitel Klara</h3>
+                    <div class="value" id="chapters-done">0 / 0</div>
+                </div>
+                <div class="progress-card">
+                    <h3>Totalt Ord</h3>
+                    <div class="value" id="total-words">0</div>
+                </div>
+                <div class="progress-card">
+                    <h3>Kvalitetspoäng</h3>
+                    <div class="value" id="quality-score">-</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Bokprojekt Status</h2>
+                <div class="alert alert-info">
+                    <strong>ℹ️ Information:</strong> Systemet är redo att börja. Ladda in ditt plot-intake för att starta Fas 0: Narrative Validation.
+                </div>
+
+                <div class="metadata">
+                    <div class="metadata-item">
+                        <div class="metadata-label">Aktuell Fas</div>
+                        <div class="metadata-value" id="current-phase">Inte startad</div>
+                    </div>
+                    <div class="metadata-item">
+                        <div class="metadata-label">Senast Uppdaterad</div>
+                        <div class="metadata-value" id="last-updated">-</div>
+                    </div>
+                    <div class="metadata-item">
+                        <div class="metadata-label">Struktur</div>
+                        <div class="metadata-value" id="book-structure">Ej vald</div>
+                    </div>
+                    <div class="metadata-item">
+                        <div class="metadata-label">Målord</div>
+                        <div class="metadata-value" id="target-words">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Kapitel Status</h2>
+                <div class="chapter-grid" id="chapter-overview">
+                    <!-- Will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- OUTLINE TAB -->
+        <div id="outline" class="tab-content">
+            <div class="card">
+                <h2>Berättelsens Outline</h2>
+                <div id="outline-content">
+                    <div class="alert alert-warning">
+                        <strong>⚠️ Ingen outline ännu:</strong> Kör Fas 0 (Narrative Validation) för att generera outline.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHARACTERS TAB -->
+        <div id="characters" class="tab-content">
+            <div class="card">
+                <h2>Karaktärer</h2>
+                <div id="characters-content">
+                    <div class="alert alert-warning">
+                        <strong>⚠️ Inga karaktärer ännu:</strong> Karaktärer skapas i Fas 1 (Creative Planning) av Morgan.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHAPTERS TAB -->
+        <div id="chapters" class="tab-content">
+            <div class="card">
+                <h2>Kapitel</h2>
+                <div id="chapters-list">
+                    <div class="alert alert-info">
+                        <strong>ℹ️ Inga kapitel ännu:</strong> Kapitel skrivs i Fas 2-4 av Writing Team och Quality Team.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHAPTER MODAL -->
+    <div id="chapter-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-chapter-title">Kapitel X</h2>
+                <button class="close-btn" onclick="closeChapterModal()">Stäng</button>
+            </div>
+
+            <div class="metadata">
+                <div class="metadata-item">
+                    <div class="metadata-label">Status</div>
+                    <div class="metadata-value" id="modal-status">-</div>
+                </div>
+                <div class="metadata-item">
+                    <div class="metadata-label">Ordantal</div>
+                    <div class="metadata-value" id="modal-words">-</div>
+                </div>
+                <div class="metadata-item">
+                    <div class="metadata-label">Kvalitet</div>
+                    <div class="metadata-value" id="modal-quality">-</div>
+                </div>
+                <div class="metadata-item">
+                    <div class="metadata-label">Senast Uppdaterad</div>
+                    <div class="metadata-value" id="modal-updated">-</div>
+                </div>
+            </div>
+
+            <h3>Versioner</h3>
+            <div class="version-selector" id="version-selector">
+                <!-- Will be populated by JavaScript -->
+            </div>
+
+            <div class="chapter-text" id="modal-chapter-text">
+                Laddar kapiteltext...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock data structure - will be populated from actual book data
+        let bookData = {
+            title: "Bokprojekt",
+            currentPhase: "Inte startad",
+            structure: "Ej vald",
+            targetWords: 80000,
+            totalWords: 0,
+            lastUpdated: new Date().toISOString(),
+            outline: null,
+            characters: [],
+            chapters: []
+        };
+
+        // Initialize with empty chapters
+        function initializeChapters(count = 12) {
+            bookData.chapters = [];
+            for (let i = 1; i <= count; i++) {
+                bookData.chapters.push({
+                    number: i,
+                    title: `Kapitel ${i}`,
+                    status: 'pending',
+                    words: 0,
+                    quality: null,
+                    versions: []
+                });
+            }
+            updateDashboard();
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Update dashboard
+        function updateDashboard() {
+            // Calculate progress
+            const completedChapters = bookData.chapters.filter(ch => ch.status === 'completed').length;
+            const totalChapters = bookData.chapters.length;
+            const progress = totalChapters > 0 ? Math.round((completedChapters / totalChapters) * 100) : 0;
+
+            // Update progress metrics
+            document.getElementById('total-progress').textContent = `${progress}%`;
+            document.getElementById('progress-fill').style.width = `${progress}%`;
+            document.getElementById('progress-fill').textContent = `${progress}%`;
+            document.getElementById('chapters-done').textContent = `${completedChapters} / ${totalChapters}`;
+            document.getElementById('total-words').textContent = bookData.totalWords.toLocaleString('sv-SE');
+
+            // Quality score
+            const avgQuality = calculateAverageQuality();
+            document.getElementById('quality-score').textContent = avgQuality ? `${avgQuality}/10` : '-';
+
+            // Metadata
+            document.getElementById('current-phase').textContent = bookData.currentPhase;
+            document.getElementById('last-updated').textContent = new Date(bookData.lastUpdated).toLocaleDateString('sv-SE');
+            document.getElementById('book-structure').textContent = bookData.structure;
+            document.getElementById('target-words').textContent = bookData.targetWords.toLocaleString('sv-SE');
+
+            // Render chapter overview
+            renderChapterOverview();
+        }
+
+        // Render chapter overview grid
+        function renderChapterOverview() {
+            const container = document.getElementById('chapter-overview');
+            container.innerHTML = '';
+
+            bookData.chapters.forEach(chapter => {
+                const div = document.createElement('div');
+                div.className = `chapter-item ${chapter.status}`;
+                div.onclick = () => openChapterModal(chapter.number);
+
+                let statusClass = 'status-pending';
+                let statusText = 'Väntande';
+                if (chapter.status === 'completed') {
+                    statusClass = 'status-completed';
+                    statusText = 'Klar';
+                } else if (chapter.status === 'in-progress') {
+                    statusClass = 'status-in-progress';
+                    statusText = 'Pågår';
+                }
+
+                div.innerHTML = `
+                    <h3>Kapitel ${chapter.number}</h3>
+                    <p>${chapter.words.toLocaleString('sv-SE')} ord</p>
+                    <span class="status-badge ${statusClass}">${statusText}</span>
+                `;
+
+                container.appendChild(div);
+            });
+        }
+
+        // Calculate average quality
+        function calculateAverageQuality() {
+            const chaptersWithQuality = bookData.chapters.filter(ch => ch.quality !== null);
+            if (chaptersWithQuality.length === 0) return null;
+
+            const sum = chaptersWithQuality.reduce((acc, ch) => acc + ch.quality, 0);
+            return (sum / chaptersWithQuality.length).toFixed(1);
+        }
+
+        // Open chapter modal
+        function openChapterModal(chapterNumber) {
+            const chapter = bookData.chapters.find(ch => ch.number === chapterNumber);
+            if (!chapter) return;
+
+            document.getElementById('modal-chapter-title').textContent = chapter.title;
+            document.getElementById('modal-status').textContent = getStatusText(chapter.status);
+            document.getElementById('modal-words').textContent = chapter.words.toLocaleString('sv-SE');
+            document.getElementById('modal-quality').textContent = chapter.quality ? `${chapter.quality}/10` : '-';
+            document.getElementById('modal-updated').textContent = new Date(bookData.lastUpdated).toLocaleDateString('sv-SE');
+
+            // Render version selector
+            renderVersionSelector(chapter);
+
+            // Show modal
+            document.getElementById('chapter-modal').classList.add('active');
+        }
+
+        // Close chapter modal
+        function closeChapterModal() {
+            document.getElementById('chapter-modal').classList.remove('active');
+        }
+
+        // Render version selector
+        function renderVersionSelector(chapter) {
+            const container = document.getElementById('version-selector');
+            container.innerHTML = '';
+
+            if (chapter.versions.length === 0) {
+                document.getElementById('modal-chapter-text').textContent = 'Inget innehåll ännu. Detta kapitel har inte skrivits.';
+                return;
+            }
+
+            chapter.versions.forEach((version, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'version-btn';
+                btn.textContent = version.name;
+                btn.onclick = () => showVersion(chapter, index);
+
+                if (index === chapter.versions.length - 1) {
+                    btn.classList.add('active');
+                }
+
+                container.appendChild(btn);
+            });
+
+            // Show latest version by default
+            showVersion(chapter, chapter.versions.length - 1);
+        }
+
+        // Show version text
+        function showVersion(chapter, versionIndex) {
+            // Update active button
+            document.querySelectorAll('.version-btn').forEach((btn, index) => {
+                btn.classList.toggle('active', index === versionIndex);
+            });
+
+            const version = chapter.versions[versionIndex];
+            document.getElementById('modal-chapter-text').textContent = version.text;
+        }
+
+        // Get status text in Swedish
+        function getStatusText(status) {
+            switch(status) {
+                case 'completed': return 'Klar';
+                case 'in-progress': return 'Pågår';
+                case 'pending': return 'Väntande';
+                default: return status;
+            }
+        }
+
+        // Load book data from JSON file
+        function loadBookData() {
+            // This would load from /home/user/noir-book-system/books/[project]/data.json
+            // For now, initialize with empty data
+            initializeChapters(12);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('chapter-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeChapterModal();
+            }
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBookData();
+        });
+    </script>
+</body>
+</html>

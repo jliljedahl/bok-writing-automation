@@ -1,0 +1,195 @@
+{
+  "title": "Min Bok Titel",
+  "author": "Författarens Namn",
+  "currentPhase": "Fas 0: Narrative Validation",
+  "structure": "Hybrid (18 kapitel)",
+  "targetWords": 80000,
+  "totalWords": 0,
+  "lastUpdated": "2025-11-06T12:00:00Z",
+  "qualityGates": {
+    "phase0": {
+      "passed": false,
+      "score": null,
+      "notes": ""
+    },
+    "phase1": {
+      "passed": false,
+      "score": null,
+      "notes": ""
+    }
+  },
+  "outline": {
+    "logline": "En kort beskrivning av berättelsen i 1-2 meningar.",
+    "hook": "Det som fångar läsaren från början.",
+    "twist": "Den stora vändningen som ingen ser komma.",
+    "resolution": "Hur det hela slutar.",
+    "acts": [
+      {
+        "number": 1,
+        "title": "Akt I: Setup",
+        "description": "Etablera karaktärer, värld, och inciting incident.",
+        "beats": [
+          {
+            "name": "Opening Image",
+            "description": "Hur världen ser ut innan allt förändras.",
+            "chapter": 1
+          },
+          {
+            "name": "Inciting Incident",
+            "description": "Händelsen som sätter berättelsen i rörelse.",
+            "chapter": 2
+          }
+        ]
+      },
+      {
+        "number": 2,
+        "title": "Akt II: Confrontation",
+        "description": "Protagonisten kämpar mot hinder, stakes höjs.",
+        "beats": [
+          {
+            "name": "Midpoint",
+            "description": "Stor twist som vänder berättelsen.",
+            "chapter": 6
+          },
+          {
+            "name": "All Is Lost",
+            "description": "Mörkaste stunden.",
+            "chapter": 9
+          }
+        ]
+      },
+      {
+        "number": 3,
+        "title": "Akt III: Resolution",
+        "description": "Klimax och resolution.",
+        "beats": [
+          {
+            "name": "Climax",
+            "description": "Protagonist vs antagonist, högsta spänning.",
+            "chapter": 11
+          },
+          {
+            "name": "Resolution",
+            "description": "Stoff av lösa trådar, ny normal.",
+            "chapter": 12
+          }
+        ]
+      }
+    ]
+  },
+  "characters": [
+    {
+      "name": "Martin Sundberg",
+      "role": "Protagonist",
+      "age": 42,
+      "occupation": "Kriminalinspektör",
+      "description": "Utbränd polis med komplex förhistoria.",
+      "arc": {
+        "start": "Cynisk och isolerad, undviker känslor.",
+        "middle": "Tvingas konfrontera sitt förflutna.",
+        "end": "Accepterar sin sårbarhet, öppnar sig."
+      },
+      "ghost": "Misslyckades rädda sin partner för 5 år sedan.",
+      "want": "Lösa fallet och gå i pension.",
+      "need": "Förlåta sig själv och hitta mening igen."
+    },
+    {
+      "name": "Emma Lindqvist",
+      "role": "Antagonist",
+      "age": 38,
+      "occupation": "Tidigare advokat",
+      "description": "Briljant men sociopatisk, driver hämnd.",
+      "arc": {
+        "start": "Verkar vara allierad med Martin.",
+        "middle": "Avslöjas ha dolt agenda.",
+        "end": "Konfronteras och besegras."
+      },
+      "ghost": "Förlorade allt i en korrupt rättegång.",
+      "want": "Hämnas på de som förstörde hennes liv.",
+      "need": "Släppa taget om hatet (men vägrar)."
+    }
+  ],
+  "chapters": [
+    {
+      "number": 1,
+      "title": "Kapitel 1: Den Första Kroppen",
+      "status": "completed",
+      "words": 5420,
+      "quality": 8.3,
+      "tension": 7,
+      "lastUpdated": "2025-11-06T10:00:00Z",
+      "synopsis": "Martin hittar ett lik som visar sig vara någon från hans förflutna.",
+      "versions": [
+        {
+          "name": "Draft v1",
+          "date": "2025-11-05T14:00:00Z",
+          "author": "Sage",
+          "quality": 7.2,
+          "text": "Kapiteltext här...\n\nKroppen hittades en tisdag..."
+        },
+        {
+          "name": "Draft v2",
+          "date": "2025-11-05T18:00:00Z",
+          "author": "Sage (efter Ellis feedback)",
+          "quality": 8.0,
+          "text": "Förbättrad version...\n\nKroppen hittades en tisdag..."
+        },
+        {
+          "name": "FINAL",
+          "date": "2025-11-06T10:00:00Z",
+          "author": "Sage (efter QA)",
+          "quality": 8.3,
+          "text": "Final version...\n\nKroppen hittades en tisdag..."
+        }
+      ],
+      "metadata": {
+        "pov": "Martin Sundberg",
+        "location": "Ystad, Sverige",
+        "timeOfDay": "Morgon",
+        "season": "December",
+        "factVerification": 98,
+        "continuityErrors": 0,
+        "agentScores": {
+          "sage": 8.5,
+          "blake": 8.0,
+          "ellis": 8.2,
+          "finley": 9.8,
+          "gray": 10.0,
+          "jordan": 8.5
+        }
+      }
+    },
+    {
+      "number": 2,
+      "title": "Kapitel 2",
+      "status": "in-progress",
+      "words": 2100,
+      "quality": null,
+      "tension": null,
+      "lastUpdated": "2025-11-06T12:00:00Z",
+      "synopsis": "Martin börjar undersöka fallet.",
+      "versions": [
+        {
+          "name": "Draft v1",
+          "date": "2025-11-06T12:00:00Z",
+          "author": "Sage",
+          "quality": null,
+          "text": "Work in progress..."
+        }
+      ],
+      "metadata": {}
+    },
+    {
+      "number": 3,
+      "title": "Kapitel 3",
+      "status": "pending",
+      "words": 0,
+      "quality": null,
+      "tension": null,
+      "lastUpdated": null,
+      "synopsis": "",
+      "versions": [],
+      "metadata": {}
+    }
+  ]
+}
