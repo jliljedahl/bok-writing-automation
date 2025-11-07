@@ -1,0 +1,52 @@
+{
+  "feedbackType": "outline",
+  "date": "2025-11-07",
+  "phase": "Fas 0: Narrative Validation",
+  "decision": "REVISE",
+  "overallScore": 7,
+  "comments": {
+    "logline": {
+      "score": 8,
+      "feedback": "[Din feedback här]",
+      "changeRequested": false
+    },
+    "hook": {
+      "score": 8,
+      "feedback": "[Din feedback här]",
+      "changeRequested": false
+    },
+    "twist": {
+      "score": 7,
+      "feedback": "[Din feedback här]",
+      "changeRequested": true
+    },
+    "resolution": {
+      "score": 7,
+      "feedback": "[Din feedback här]",
+      "changeRequested": false
+    },
+    "act1": {
+      "score": 8,
+      "feedback": "[Din feedback här]",
+      "changeRequested": false
+    },
+    "act2": {
+      "score": 7,
+      "feedback": "[Din feedback här]",
+      "changeRequested": true
+    },
+    "act3": {
+      "score": 8,
+      "feedback": "[Din feedback här]",
+      "changeRequested": false
+    }
+  },
+  "specificRequests": [
+    "[Specifik request 1]",
+    "[Specifik request 2]"
+  ],
+  "strengthsToKeep": [
+    "[Vad som fungerar bra]"
+  ],
+  "nextSteps": "[Vad ska hända nu?]"
+}

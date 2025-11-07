@@ -1,0 +1,51 @@
+{
+  "feedbackType": "chapter",
+  "chapterNumber": 1,
+  "version": "Draft v1",
+  "date": "2025-11-07",
+  "decision": "REVISE",
+  "overallScore": 7,
+  "categories": {
+    "pacing": {
+      "score": 8,
+      "feedback": "[Hur är pacingen? För snabb/långsam?]"
+    },
+    "tension": {
+      "score": 7,
+      "feedback": "[Byggs tension up effektivt?]"
+    },
+    "characterVoice": {
+      "score": 8,
+      "feedback": "[Känns karaktärernas röster authentic?]"
+    },
+    "showDontTell": {
+      "score": 7,
+      "feedback": "[För mycket exposition eller bra balans?]"
+    },
+    "hook": {
+      "score": 9,
+      "feedback": "[Fångar kapitlet läsaren från start?]"
+    },
+    "dialogue": {
+      "score": 8,
+      "feedback": "[Känns dialogen natural? Subtext?]"
+    }
+  },
+  "lineComments": [
+    {
+      "location": "[Paragraph/line reference]",
+      "issue": "[Vad är problemet?]",
+      "suggestion": "[Hur fixa?]"
+    }
+  ],
+  "strengths": [
+    "[Vad fungerar bra som måste behållas]"
+  ],
+  "mustFix": [
+    "[Critical issues som MÅSTE fixas]"
+  ],
+  "niceToHave": [
+    "[Minor improvements, inte critical]"
+  ],
+  "nextSteps": "[Vad händer nu? Revision? QA? Approve?]"
+}
