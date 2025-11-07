@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOIR - Plot Intake</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #00d4ff;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #a0a0a0;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border-left: 4px solid #00d4ff;
+        }
+
+        .section-title {
+            color: #00d4ff;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-subtitle {
+            color: #60a5fa;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            color: #b0b0b0;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        textarea.large {
+            min-height: 200px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-left: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .help-text {
+            font-size: 0.9em;
+            color: #808080;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .submit-section {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, #00d4ff 0%, #0077ff 100%);
+            color: white;
+            border: none;
+            padding: 18px 60px;
+            font-size: 1.3em;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.6);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .btn-submit:disabled {
+            background: #555;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .character-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+    <script src="../static/noir-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 NOIR Plot Intake</h1>
+        <p class="subtitle">Fyll i detta formulär för att starta ditt bokprojekt</p>
+
+        <form id="plotIntakeForm">
+            <!-- GRUNDINFORMATION -->
+            <div class="section">
+                <h2 class="section-title">📋 Grundinformation</h2>
+
+                <div class="form-group">
+                    <label for="projectName">Projekt ID / Kort namn *</label>
+                    <input type="text" id="projectName" name="projectName" required
+                           placeholder="t.ex. min-thriller (används som mappnamn)">
+                    <p class="help-text">Använd endast bokstäver, siffror och bindestreck</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">Boktitel (preliminär) *</label>
+                    <input type="text" id="title" name="title" required
+                           placeholder="Din boktitel">
+                </div>
+
+                <div class="form-group">
+                    <label for="genre">Genre *</label>
+                    <select id="genre" name="genre" required>
+                        <option value="">Välj genre...</option>
+                        <option value="polisroman">Polisroman (procedural)</option>
+                        <option value="psykologisk-thriller">Psykologisk thriller</option>
+                        <option value="noir">Noir</option>
+                        <option value="cozy-mystery">Cozy mystery</option>
+                        <option value="juridisk-thriller">Juridisk thriller</option>
+                        <option value="annan">Annan</option>
+                    </select>
+                </div>
+
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label for="wordCount">Målordantal</label>
+                        <input type="number" id="wordCount" name="wordCount"
+                               placeholder="80000" value="80000">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="targetAudience">Målgrupp</label>
+                        <input type="text" id="targetAudience" name="targetAudience"
+                               placeholder="30-60 år, svenska deckare">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ELEVATOR PITCH -->
+            <div class="section">
+                <h2 class="section-title">🎬 Elevator Pitch</h2>
+
+                <div class="form-group">
+                    <label for="logline">Logline (1-2 meningar som fångar hela berättelsen) *</label>
+                    <textarea id="logline" name="logline" required
+                              placeholder="Exempel: När en framgångsrik affärskvinna hittas mördad i Stockholms skärgård, måste en utbränd kriminalinspektör konfrontera sina egna demoner för att lösa fallet - innan mördaren slår till igen."></textarea>
+                </div>
+            </div>
+
+            <!-- PROTAGONIST -->
+            <div class="section">
+                <h2 class="section-title">🎭 Protagonist</h2>
+
+                <div class="character-card">
+                    <h3 class="section-subtitle">Grundinformation</h3>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="protag_name">Namn *</label>
+                            <input type="text" id="protag_name" name="protag_name" required
+                                   placeholder="För- och efternamn">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="protag_age">Ålder *</label>
+                            <input type="number" id="protag_age" name="protag_age" required
+                                   placeholder="42">
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="protag_gender">Kön</label>
+                            <select id="protag_gender" name="protag_gender">
+                                <option value="">Välj...</option>
+                                <option value="man">Man</option>
+                                <option value="kvinna">Kvinna</option>
+                                <option value="annat">Annat</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="protag_occupation">Yrke *</label>
+                            <input type="text" id="protag_occupation" name="protag_occupation" required
+                                   placeholder="Kriminalinspektör">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="protag_location">Bostadsort</label>
+                        <input type="text" id="protag_location" name="protag_location"
+                               placeholder="Stockholm">
+                    </div>
+
+                    <h3 class="section-subtitle">Psykologisk profil</h3>
+
+                    <div class="form-group">
+                        <label for="protag_need">Core need (djupaste drift) *</label>
+                        <input type="text" id="protag_need" name="protag_need" required
+                               placeholder="Rättfärdighet, sanning, hämnd, försoning">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="protag_fear">Core fear (djupaste rädsla) *</label>
+                        <input type="text" id="protag_fear" name="protag_fear" required
+                               placeholder="Förlust, misslyckande, att upprepa tidigare misstag">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="protag_flaw">Fatal flaw (största svaghet) *</label>
+                        <input type="text" id="protag_flaw" name="protag_flaw" required
+                               placeholder="Sturhet, impulsivitet, isolerar sig">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="protag_ghost">Ghost (trauma från förr) *</label>
+                        <textarea id="protag_ghost" name="protag_ghost" required
+                                  placeholder="Tidigare fall gick fel och någon dog. Partner dog under tjänst. Traumatisk barndom."></textarea>
+                    </div>
+
+                    <h3 class="section-subtitle">Karaktärsutveckling</h3>
+
+                    <div class="form-group">
+                        <label for="protag_arc_start">I början av boken är protagonisten:</label>
+                        <textarea id="protag_arc_start" name="protag_arc_start"
+                                  placeholder="Beskriv utgångsläge"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="protag_arc_end">I slutet av boken har protagonisten:</label>
+                        <textarea id="protag_arc_end" name="protag_arc_end"
+                                  placeholder="Beskriv transformation"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANTAGONIST -->
+            <div class="section">
+                <h2 class="section-title">💀 Antagonist</h2>
+
+                <div class="character-card">
+                    <h3 class="section-subtitle">Grundinformation</h3>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="antag_name">Namn *</label>
+                            <input type="text" id="antag_name" name="antag_name" required
+                                   placeholder="För- och efternamn (eller 'okänd')">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="antag_age">Ålder</label>
+                            <input type="number" id="antag_age" name="antag_age"
+                                   placeholder="35">
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="antag_gender">Kön</label>
+                            <select id="antag_gender" name="antag_gender">
+                                <option value="">Välj...</option>
+                                <option value="man">Man</option>
+                                <option value="kvinna">Kvinna</option>
+                                <option value="annat">Annat</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="antag_background">Yrke/Bakgrund *</label>
+                            <input type="text" id="antag_background" name="antag_background" required
+                                   placeholder="Vad gör de? Vad har format dem?">
+                        </div>
+                    </div>
+
+                    <h3 class="section-subtitle">Motivation</h3>
+
+                    <div class="form-group">
+                        <label for="antag_motivation">Varför gör de detta? *</label>
+                        <textarea id="antag_motivation" name="antag_motivation" required
+                                  placeholder="MÅSTE vara logiskt från deras perspektiv! Hämnd? Skydda hemlighet? Ideologi? Överlevnad?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="antag_sympathy">Vad är SYMPATISKT med antagonisten?</label>
+                        <textarea id="antag_sympathy" name="antag_sympathy"
+                                  placeholder="Även skurkar måste ha mänsklighet. Vad kan läsaren relatera till?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="antag_connection">Relation till protagonist</label>
+                        <textarea id="antag_connection" name="antag_connection"
+                                  placeholder="Hur kopplas de? Känner varandra sen tidigare? Slumpmässig koppling? Spegling av varandra?"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CENTRAL KONFLIKT -->
+            <div class="section">
+                <h2 class="section-title">⚔️ Central Konflikt</h2>
+
+                <div class="form-group">
+                    <label for="central_mystery">Vad är det centrala mysteriet/konflikten? *</label>
+                    <textarea id="central_mystery" name="central_mystery" required
+                              placeholder="Exempel: Vem mördade Emma Lindqvist och varför?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="stakes">Vad står på spel? *</label>
+                    <textarea id="stakes" name="stakes" required
+                              placeholder="Om protagonist misslyckas, vad händer? Fler dör? Sanningen begravs? Protagonist förstör sig själv?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="personal_connection">Varför är detta PERSONLIGT för protagonist?</label>
+                    <textarea id="personal_connection" name="personal_connection"
+                              placeholder="Offer var vän? Påminner om tidigare fall? Hotar protagonists karriär/familj?"></textarea>
+                </div>
+            </div>
+
+            <!-- SETTING -->
+            <div class="section">
+                <h2 class="section-title">🗺️ Setting</h2>
+
+                <div class="form-group">
+                    <label for="setting_primary">Huvudplats *</label>
+                    <input type="text" id="setting_primary" name="setting_primary" required
+                           placeholder="Stockholm, Göteborg, Visby, fiktiv småstad i Norrland">
+                </div>
+
+                <div class="form-group">
+                    <label for="setting_reason">Varför denna plats?</label>
+                    <textarea id="setting_reason" name="setting_reason"
+                              placeholder="Vad ger setting till berättelsen?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="setting_season">Årstid och tidsspann</label>
+                    <select id="setting_season" name="setting_season">
+                        <option value="">Välj årstid...</option>
+                        <option value="vinter">Vinter</option>
+                        <option value="vår">Vår</option>
+                        <option value="sommar">Sommar</option>
+                        <option value="höst">Höst</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="setting_timespan">Tidsspann</label>
+                    <input type="text" id="setting_timespan" name="setting_timespan"
+                           placeholder="Hur länge täcker berättelsen? Veckor? Månader?">
+                </div>
+            </div>
+
+            <!-- PLOT OUTLINE -->
+            <div class="section">
+                <h2 class="section-title">📖 Plot Outline</h2>
+
+                <h3 class="section-subtitle">Akt I: Setup (25%)</h3>
+
+                <div class="form-group">
+                    <label for="act1_inciting">Inciting incident (10%) *</label>
+                    <textarea id="act1_inciting" name="act1_inciting" required
+                              placeholder="Vad kickstarter berättelsen? Kropp hittas, protagonist blir tilldelad fallet"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="act1_plotpoint">First plot point (25%) *</label>
+                    <textarea id="act1_plotpoint" name="act1_plotpoint" required
+                              placeholder="Protagonist går in i berättelsen. Vad händer som gör att det inte finns väg tillbaka?"></textarea>
+                </div>
+
+                <h3 class="section-subtitle">Akt II: Konfrontation (50%)</h3>
+
+                <div class="form-group">
+                    <label for="act2_rising">Rising action (25-50%)</label>
+                    <textarea id="act2_rising" name="act2_rising"
+                              placeholder="Investigation, discovery, falskt spår. Vad händer?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="act2_midpoint">Midpoint twist (50%) *</label>
+                    <textarea id="act2_midpoint" name="act2_midpoint" required
+                              placeholder="Stor vändning mitt i berättelsen. Vad förändrar spelplanen?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="act2_darkest">Darkest moment (75%) *</label>
+                    <textarea id="act2_darkest" name="act2_darkest" required
+                              placeholder="Protagonist verkar besegrad. Allt går fel. Vad händer?"></textarea>
+                </div>
+
+                <h3 class="section-subtitle">Akt III: Resolution (25%)</h3>
+
+                <div class="form-group">
+                    <label for="act3_climax">Climax (90%) *</label>
+                    <textarea id="act3_climax" name="act3_climax" required
+                              placeholder="Konfrontation. Protagonist vs antagonist. Hur löses mysteriet?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="act3_resolution">Resolution (95-100%)</label>
+                    <textarea id="act3_resolution" name="act3_resolution"
+                              placeholder="Aftermath. Hur har protagonisten förändrats? Hur ser världen ut nu?"></textarea>
+                </div>
+            </div>
+
+            <!-- TWIST -->
+            <div class="section">
+                <h2 class="section-title">🔀 Twist & Upplösning</h2>
+
+                <div class="form-group">
+                    <label for="twist">Den stora twisten *</label>
+                    <textarea id="twist" name="twist" required class="large"
+                              placeholder="Vad är den överraskande vändningen? Vem är riktiga mördaren? Vad var den verkliga motivationen?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="twist_logic">Varför är detta överraskande MEN logiskt?</label>
+                    <textarea id="twist_logic" name="twist_logic"
+                              placeholder="Twisten måste vara shocking men hintas i tidigare delar"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="clues">Ledtrådar planterade tidigt</label>
+                    <textarea id="clues" name="clues"
+                              placeholder="Lista subtila ledtrådar som läsaren kan hitta vid omläsning (en per rad)"></textarea>
+                </div>
+            </div>
+
+            <!-- TON OCH ATMOSFÄR -->
+            <div class="section">
+                <h2 class="section-title">🎨 Ton och Atmosfär</h2>
+
+                <div class="form-group">
+                    <label>Övergripande ton:</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="tone_dark" name="tone_dark" value="mörk">
+                            <label for="tone_dark">Mörk och melankolisk (Mankell-stil)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="tone_fast" name="tone_fast" value="snabb">
+                            <label for="tone_fast">Snabb och intensiv (Larsson-stil)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="tone_atmospheric" name="tone_atmospheric" value="atmosfärisk">
+                            <label for="tone_atmospheric">Atmosfärisk och gotisk (Läckberg-stil)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="tone_realistic" name="tone_realistic" value="realistisk">
+                            <label for="tone_realistic">Realistisk och procedural (Viveca Sten-stil)</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="emotional_impact">Känslomässig påverkan</label>
+                    <textarea id="emotional_impact" name="emotional_impact"
+                              placeholder="Hur ska läsaren KÄNNA när de läser? Rädd? Melankolisk? Spänd? Fascinerad?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="themes">Teman</label>
+                    <textarea id="themes" name="themes"
+                              placeholder="Vilka djupare teman utforskas? Rättvisa vs hämnd? Skuld och försoning? Mänsklig ondska? Sanningens pris?"></textarea>
+                </div>
+            </div>
+
+            <!-- ÖVRIGT -->
+            <div class="section">
+                <h2 class="section-title">💭 Övrigt</h2>
+
+                <div class="form-group">
+                    <label for="unique">Vad gör DIN bok UNIK?</label>
+                    <textarea id="unique" name="unique"
+                              placeholder="Vad skiljer denna från andra svenska deckare?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="uncertainties">Vad är du OSÄKER på?</label>
+                    <textarea id="uncertainties" name="uncertainties"
+                              placeholder="Finns det delar av plotten du inte är säker på? Områden där du behöver hjälp?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="specific_requests">Specifika önskemål till agenterna</label>
+                    <textarea id="specific_requests" name="specific_requests"
+                              placeholder="Något specifikt du vill att Harper, Morgan, Quinn eller River ska fokusera på?"></textarea>
+                </div>
+            </div>
+
+            <div class="submit-section">
+                <button type="submit" class="btn-submit" id="submitBtn">
+                    🚀 Skicka Plot & Starta Projekt
+                </button>
+                <p class="help-text" style="margin-top: 20px;">
+                    När du skickar in kommer Creative Team att börja arbeta med din plot
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('plotIntakeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const form = e.target;
+            const submitBtn = document.getElementById('submitBtn');
+            const projectName = document.getElementById('projectName').value.trim();
+
+            // Validate project name
+            if (!/^[a-z0-9-]+$/.test(projectName)) {
+                NOIR.ui.showNotification('Projekt ID får endast innehålla små bokstäver, siffror och bindestreck', 'error');
+                return;
+            }
+
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processar plot...';
+
+            // Show loading
+            NOIR.ui.showLoading(true);
+
+            try {
+                // Collect form data
+                const formData = new FormData(form);
+                const plotData = {};
+
+                // Convert FormData to object
+                for (const [key, value] of formData.entries()) {
+                    if (key !== 'projectName') {
+                        plotData[key] = value;
+                    }
+                }
+
+                // Collect tone checkboxes
+                plotData.tone = [];
+                if (formData.get('tone_dark')) plotData.tone.push('mörk och melankolisk');
+                if (formData.get('tone_fast')) plotData.tone.push('snabb och intensiv');
+                if (formData.get('tone_atmospheric')) plotData.tone.push('atmosfärisk och gotisk');
+                if (formData.get('tone_realistic')) plotData.tone.push('realistisk och procedural');
+
+                // Submit to API
+                const result = await NOIR.api.submitPlotIntake(projectName, plotData);
+
+                // Success!
+                NOIR.ui.showLoading(false);
+                NOIR.ui.showNotification('Plot mottagen! Genererar outline...', 'success');
+
+                // Redirect to dashboard after 2 seconds
+                setTimeout(() => {
+                    window.location.href = `../../books/${projectName}/dashboard.html`;
+                }, 2000);
+
+            } catch (error) {
+                console.error('Error submitting plot:', error);
+                NOIR.ui.showLoading(false);
+                NOIR.ui.showNotification('Fel vid inskickning: ' + error.message, 'error');
+
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🚀 Skicka Plot & Starta Projekt';
+            }
+        });
+    </script>
+</body>
+</html>

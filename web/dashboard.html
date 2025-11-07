@@ -576,6 +576,12 @@
                 </div>
             </div>
 
+            <div style="margin-top: 20px; margin-bottom: 20px;">
+                <button class="btn-decision btn-revise" id="chapter-feedback-btn" onclick="openChapterFeedback()" style="width: 100%;">
+                    💬 Ge Feedback på Detta Kapitel
+                </button>
+            </div>
+
             <h3>Versioner</h3>
             <div class="version-selector" id="version-selector">
                 <!-- Will be populated by JavaScript -->
@@ -587,7 +593,14 @@
         </div>
     </div>
 
+    <!-- Load API and Feedback UI -->
+    <script src="../../web/static/noir-app.js"></script>
+    <script src="../../web/static/feedback-ui.js"></script>
+
     <script>
+        // Project name (extracted from current directory)
+        const projectName = window.location.pathname.split('/').filter(p => p).slice(-2)[0];
+
         // Mock data structure - will be populated from actual book data
         let bookData = {
             title: "Bokprojekt",
@@ -694,9 +707,14 @@
         }
 
         // Open chapter modal
+        let currentChapter = null;
+
         function openChapterModal(chapterNumber) {
             const chapter = bookData.chapters.find(ch => ch.number === chapterNumber);
             if (!chapter) return;
+
+            // Store current chapter for feedback
+            currentChapter = chapter;
 
             document.getElementById('modal-chapter-title').textContent = chapter.title;
             document.getElementById('modal-status').textContent = getStatusText(chapter.status);
@@ -709,6 +727,17 @@
 
             // Show modal
             document.getElementById('chapter-modal').classList.add('active');
+        }
+
+        // Open chapter feedback
+        function openChapterFeedback() {
+            if (!currentChapter) return;
+
+            // Close chapter modal first
+            closeChapterModal();
+
+            // Open feedback modal
+            FeedbackUI.showChapterFeedbackModal(projectName, currentChapter);
         }
 
         // Close chapter modal
@@ -809,6 +838,13 @@
             }
 
             let html = `
+                <div style="margin-bottom: 20px;">
+                    <button class="btn-decision btn-revise" onclick="FeedbackUI.showOutlineFeedbackModal(projectName, bookData.outline)" style="margin-bottom: 20px;">
+                        💬 Ge Feedback på Outline
+                    </button>
+                    ${outline.status ? `<p style="color: var(--muted); margin-top: 10px;">Status: ${outline.status}</p>` : ''}
+                </div>
+
                 <div class="outline-section">
                     <h3>Logline</h3>
                     <p>${outline.logline || 'Ingen logline ännu'}</p>
