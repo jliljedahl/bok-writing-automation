@@ -60,6 +60,10 @@ async function submitPlotIntake(projectName, plotData) {
     return await apiCall(`/projects/${projectName}/plot-intake`, 'POST', plotData);
 }
 
+async function submitPlotBrief(projectName, briefData) {
+    return await apiCall(`/projects/${projectName}/plot-brief`, 'POST', briefData);
+}
+
 // ============================================================================
 // OUTLINE FEEDBACK
 // ============================================================================
@@ -195,6 +199,7 @@ window.NOIR = {
         getProject,
         createProject,
         submitPlotIntake,
+        submitPlotBrief,
         getOutline,
         submitOutlineFeedback,
         getCharacters,

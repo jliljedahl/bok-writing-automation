@@ -105,6 +105,174 @@ def create_project(project_name):
 # PLOT INTAKE ENDPOINTS
 # ============================================================================
 
+@app.route('/api/projects/<project_name>/plot-brief', methods=['POST'])
+def submit_plot_brief(project_name):
+    """
+    Submit simple plot brief and let AI agents generate detailed plot.
+    This is the NEW simplified workflow!
+    """
+    try:
+        brief_data = request.json
+
+        # Create or load project
+        updater = get_updater(project_name)
+        try:
+            data = get_project_data(project_name)
+        except:
+            # Project doesn't exist, create from template
+            updater.create_from_template()
+            data = get_project_data(project_name)
+
+        # Store the original brief
+        data['plotBrief'] = {
+            **brief_data,
+            "submittedDate": datetime.now().isoformat(),
+            "status": "processing"
+        }
+
+        # Simulate AI Agent Processing
+        # In production, this would call actual AI agents
+        # For now, we generate structured mock data based on the brief
+
+        plot_idea = brief_data.get('plotIdea', '')
+        genre = brief_data.get('genre', '')
+
+        # HARPER - Plot Architect generates structure
+        data['agentWork'] = {
+            "harper": {
+                "status": "completed",
+                "timestamp": datetime.now().isoformat(),
+                "output": {
+                    "logline": f"[HARPER GENERATED] Based on your {genre} idea - A compelling logline that captures the essence of your story...",
+                    "hook": f"[HARPER GENERATED] An opening that immediately pulls readers in...",
+                    "twist": f"[HARPER GENERATED] A shocking revelation that changes everything...",
+                    "resolution": f"[HARPER GENERATED] How the story concludes and what it means...",
+                    "threeActStructure": {
+                        "act1": {
+                            "description": "Setup - introduce world, characters, conflict",
+                            "keyBeats": [
+                                {"name": "Opening Image", "description": "..."},
+                                {"name": "Inciting Incident", "description": "..."},
+                                {"name": "First Plot Point", "description": "..."}
+                            ]
+                        },
+                        "act2": {
+                            "description": "Confrontation - escalating conflict",
+                            "keyBeats": [
+                                {"name": "Midpoint", "description": "..."},
+                                {"name": "All Is Lost", "description": "..."}
+                            ]
+                        },
+                        "act3": {
+                            "description": "Resolution - climax and wrap-up",
+                            "keyBeats": [
+                                {"name": "Climax", "description": "..."},
+                                {"name": "Resolution", "description": "..."}
+                            ]
+                        }
+                    }
+                }
+            },
+            "morgan": {
+                "status": "completed",
+                "timestamp": datetime.now().isoformat(),
+                "output": {
+                    "protagonist": {
+                        "name": "[MORGAN GENERATED] Name based on genre/setting",
+                        "age": 35,
+                        "occupation": "[MORGAN GENERATED] Occupation",
+                        "psychology": {
+                            "ghost": "[MORGAN GENERATED] Past trauma that shapes them...",
+                            "want": "[MORGAN GENERATED] What they consciously pursue...",
+                            "need": "[MORGAN GENERATED] What they actually need to grow...",
+                            "fear": "[MORGAN GENERATED] Deepest fear holding them back...",
+                            "flaw": "[MORGAN GENERATED] Fatal flaw to overcome..."
+                        },
+                        "arc": {
+                            "beginning": "[MORGAN GENERATED] Who they are at start...",
+                            "middle": "[MORGAN GENERATED] How they change...",
+                            "end": "[MORGAN GENERATED] Who they become..."
+                        }
+                    },
+                    "antagonist": {
+                        "name": "[MORGAN GENERATED] Antagonist name",
+                        "motivation": "[MORGAN GENERATED] Why they do what they do (must be logical from their POV)...",
+                        "connection": "[MORGAN GENERATED] How they relate to protagonist...",
+                        "sympathy": "[MORGAN GENERATED] What makes them human/relatable..."
+                    },
+                    "supporting": [
+                        {
+                            "name": "[MORGAN GENERATED] Supporting character 1",
+                            "role": "Ally/Mentor/etc",
+                            "purpose": "Their role in protagonist's journey"
+                        }
+                    ]
+                }
+            },
+            "river": {
+                "status": "completed",
+                "timestamp": datetime.now().isoformat(),
+                "output": {
+                    "primarySetting": {
+                        "location": "[RIVER GENERATED] Specific location",
+                        "atmosphere": "[RIVER GENERATED] Mood and feeling of place...",
+                        "significance": "[RIVER GENERATED] Why this place matters to the story...",
+                        "season": "Winter/Summer/etc",
+                        "timespan": "How long the story takes"
+                    },
+                    "keyLocations": [
+                        {
+                            "name": "[RIVER GENERATED] Important location 1",
+                            "description": "Details...",
+                            "storyRole": "Why this place is important..."
+                        }
+                    ]
+                }
+            },
+            "quinn": {
+                "status": "completed",
+                "timestamp": datetime.now().isoformat(),
+                "output": {
+                    "narrativeVoice": {
+                        "pov": "First person / Third person limited / etc",
+                        "tense": "Present / Past",
+                        "tone": f"[QUINN GENERATED] Based on {genre} - dark/light/etc",
+                        "style": "[QUINN GENERATED] Prose style recommendations..."
+                    },
+                    "characterVoices": {
+                        "protagonist": "[QUINN GENERATED] How they speak/think...",
+                        "antagonist": "[QUINN GENERATED] Distinct voice..."
+                    }
+                }
+            }
+        }
+
+        # Update status
+        data['currentPhase'] = "Agent Processing Complete - Awaiting Your Review"
+        data['lastUpdated'] = datetime.now().isoformat()
+        data['title'] = brief_data.get('title', f"Untitled {genre.capitalize()} Novel")
+        data['genre'] = genre
+        data['targetWords'] = brief_data.get('wordCount', 80000)
+
+        # Save
+        save_project_data(project_name, data)
+
+        return jsonify({
+            "success": True,
+            "message": "Plot brief processed by AI agents",
+            "project": project_name,
+            "agentStatus": {
+                "harper": "completed",
+                "morgan": "completed",
+                "river": "completed",
+                "quinn": "completed"
+            },
+            "nextStep": f"/plot-review.html?project={project_name}"
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/api/projects/<project_name>/plot-intake', methods=['POST'])
 def submit_plot_intake(project_name):
     """Submit plot intake and generate outline"""
