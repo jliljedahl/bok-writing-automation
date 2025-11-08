@@ -154,14 +154,19 @@ class LLMClient:
         prompt_lower = prompt.lower()
 
         # Detect what kind of output is expected based on prompt
-        if "logline" in prompt_lower or "plot" in prompt_lower:
-            return self._mock_plot_output()
-        elif "character" in prompt_lower or "protagonist" in prompt_lower:
+        # Order matters - check most specific first!
+        if "morgan" in prompt_lower or ("karaktär" in prompt_lower and "psykolog" in prompt_lower):
             return self._mock_character_output()
+        elif "harper" in prompt_lower or ("plot" in prompt_lower and "architect" in prompt_lower):
+            return self._mock_plot_output()
         elif "chapter" in prompt_lower and "write" in prompt_lower:
             return self._mock_chapter_output()
-        elif "review" in prompt_lower or "feedback" in prompt_lower:
+        elif "review" in prompt_lower or "feedback" in prompt_lower or "ellis" in prompt_lower:
             return self._mock_review_output()
+        elif "character" in prompt_lower or "protagonist" in prompt_lower:
+            return self._mock_character_output()
+        elif "logline" in prompt_lower or "plot" in prompt_lower:
+            return self._mock_plot_output()
         else:
             return f"[MOCK RESPONSE - {max_tokens} tokens]\n\nThis is a placeholder response for testing.\n\nPrompt was: {prompt[:100]}..."
 
