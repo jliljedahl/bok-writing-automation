@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOIR - Granska Agent-Förslag</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #00d4ff;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #a0a0a0;
+            font-size: 1.2em;
+        }
+
+        .status-banner {
+            background: linear-gradient(135deg, #00d4ff 0%, #0077ff 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .original-brief {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border-left: 4px solid #00d4ff;
+        }
+
+        .original-brief h2 {
+            color: #00d4ff;
+            margin-bottom: 15px;
+        }
+
+        .original-brief .content {
+            color: #d0d0d0;
+            white-space: pre-wrap;
+            line-height: 1.8;
+        }
+
+        .agent-section {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border-left: 4px solid #ffa500;
+        }
+
+        .agent-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .agent-icon {
+            font-size: 3em;
+        }
+
+        .agent-info h2 {
+            color: #ffa500;
+            margin-bottom: 5px;
+        }
+
+        .agent-info .role {
+            color: #a0a0a0;
+            font-style: italic;
+        }
+
+        .agent-output {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .output-item {
+            margin-bottom: 20px;
+        }
+
+        .output-item h3 {
+            color: #60a5fa;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .output-item p, .output-item li {
+            color: #d0d0d0;
+            line-height: 1.8;
+        }
+
+        .output-item ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .edit-section {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 6px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 1em;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #00d4ff;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 50px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 18px 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-approve {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.4);
+        }
+
+        .btn-approve:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.6);
+        }
+
+        .btn-revise {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+        }
+
+        .btn-revise:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.6);
+        }
+
+        .btn-reject {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn-reject:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.6);
+        }
+
+        .help-text {
+            text-align: center;
+            color: #808080;
+            margin-top: 20px;
+            font-size: 0.95em;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 100px;
+            font-size: 1.5em;
+            color: #00d4ff;
+        }
+
+        .character-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .character-card h4 {
+            color: #ffa500;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script src="../static/noir-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 Agent-Förslag Redo för Granskning</h1>
+            <p class="subtitle">Creative Team har utvecklat din idé</p>
+        </header>
+
+        <div id="loading" class="loading">
+            Laddar agent-förslag...
+        </div>
+
+        <div id="content" style="display: none;">
+            <div class="status-banner">
+                ✅ 4 AI-agenter har jobbat med din plot brief
+            </div>
+
+            <!-- ORIGINAL BRIEF -->
+            <div class="original-brief">
+                <h2>📝 Din Ursprungliga Idé</h2>
+                <div class="content" id="originalBrief"></div>
+            </div>
+
+            <!-- HARPER - PLOT ARCHITECT -->
+            <div class="agent-section">
+                <div class="agent-header">
+                    <div class="agent-icon">🎬</div>
+                    <div class="agent-info">
+                        <h2>Harper</h2>
+                        <p class="role">Plot Architect</p>
+                    </div>
+                </div>
+                <div class="agent-output" id="harperOutput"></div>
+            </div>
+
+            <!-- MORGAN - CHARACTER PSYCHOLOGIST -->
+            <div class="agent-section">
+                <div class="agent-header">
+                    <div class="agent-icon">🧠</div>
+                    <div class="agent-info">
+                        <h2>Morgan</h2>
+                        <p class="role">Character Psychologist</p>
+                    </div>
+                </div>
+                <div class="agent-output" id="morganOutput"></div>
+            </div>
+
+            <!-- RIVER - WORLD BUILDER -->
+            <div class="agent-section">
+                <div class="agent-header">
+                    <div class="agent-icon">🌍</div>
+                    <div class="agent-info">
+                        <h2>River</h2>
+                        <p class="role">World Builder</p>
+                    </div>
+                </div>
+                <div class="agent-output" id="riverOutput"></div>
+            </div>
+
+            <!-- QUINN - VOICE DESIGNER -->
+            <div class="agent-section">
+                <div class="agent-header">
+                    <div class="agent-icon">🎭</div>
+                    <div class="agent-info">
+                        <h2>Quinn</h2>
+                        <p class="role">Voice Designer</p>
+                    </div>
+                </div>
+                <div class="agent-output" id="quinnOutput"></div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="action-buttons">
+                <button class="btn btn-approve" onclick="approveAll()">
+                    ✅ Godkänn Allt & Fortsätt
+                </button>
+                <button class="btn btn-revise" onclick="requestRevisions()">
+                    🔄 Begär Ändringar
+                </button>
+                <button class="btn btn-reject" onclick="startOver()">
+                    ❌ Börja Om
+                </button>
+            </div>
+
+            <div class="help-text">
+                <p><strong>Godkänn Allt:</strong> Fortsätt till nästa fas med dessa förslag</p>
+                <p><strong>Begär Ändringar:</strong> Be agenterna revidera specifika delar</p>
+                <p><strong>Börja Om:</strong> Skriv en ny plot brief från början</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let projectName = '';
+        let projectData = null;
+
+        // Get project name from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        projectName = urlParams.get('project');
+
+        if (!projectName) {
+            alert('Ingen projekt specifierat!');
+            window.location.href = 'plot-brief.html';
+        }
+
+        // Load project data
+        async function loadProjectData() {
+            try {
+                projectData = await NOIR.api.getProject(projectName);
+                displayContent();
+            } catch (error) {
+                document.getElementById('loading').innerHTML =
+                    `<p style="color: #e74c3c;">❌ Kunde inte ladda projektdata: ${error.message}</p>`;
+            }
+        }
+
+        function displayContent() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+
+            // Display original brief
+            const brief = projectData.plotBrief;
+            document.getElementById('originalBrief').textContent =
+                `Genre: ${brief.genre}\n\n${brief.plotIdea}`;
+
+            // Display Harper's output
+            const harper = projectData.agentWork.harper.output;
+            document.getElementById('harperOutput').innerHTML = `
+                <div class="output-item">
+                    <h3>Logline</h3>
+                    <p>${harper.logline}</p>
+                </div>
+                <div class="output-item">
+                    <h3>Hook (Öppning)</h3>
+                    <p>${harper.hook}</p>
+                </div>
+                <div class="output-item">
+                    <h3>Twist</h3>
+                    <p>${harper.twist}</p>
+                </div>
+                <div class="output-item">
+                    <h3>Resolution (Upplösning)</h3>
+                    <p>${harper.resolution}</p>
+                </div>
+                <div class="output-item">
+                    <h3>Tre-Akt Struktur</h3>
+                    <p><strong>Akt I:</strong> ${harper.threeActStructure.act1.description}</p>
+                    <p><strong>Akt II:</strong> ${harper.threeActStructure.act2.description}</p>
+                    <p><strong>Akt III:</strong> ${harper.threeActStructure.act3.description}</p>
+                </div>
+            `;
+
+            // Display Morgan's output
+            const morgan = projectData.agentWork.morgan.output;
+            document.getElementById('morganOutput').innerHTML = `
+                <div class="character-card">
+                    <h4>👤 Protagonist: ${morgan.protagonist.name}</h4>
+                    <p><strong>Ålder:</strong> ${morgan.protagonist.age}</p>
+                    <p><strong>Yrke:</strong> ${morgan.protagonist.occupation}</p>
+                    <p><strong>Ghost (Trauma):</strong> ${morgan.protagonist.psychology.ghost}</p>
+                    <p><strong>Want (Vill ha):</strong> ${morgan.protagonist.psychology.want}</p>
+                    <p><strong>Need (Behöver):</strong> ${morgan.protagonist.psychology.need}</p>
+                    <p><strong>Fear (Rädsla):</strong> ${morgan.protagonist.psychology.fear}</p>
+                    <p><strong>Flaw (Svaghet):</strong> ${morgan.protagonist.psychology.flaw}</p>
+                    <h4 style="margin-top: 15px;">Character Arc</h4>
+                    <p><strong>Början:</strong> ${morgan.protagonist.arc.beginning}</p>
+                    <p><strong>Mitten:</strong> ${morgan.protagonist.arc.middle}</p>
+                    <p><strong>Slut:</strong> ${morgan.protagonist.arc.end}</p>
+                </div>
+                <div class="character-card">
+                    <h4>💀 Antagonist: ${morgan.antagonist.name}</h4>
+                    <p><strong>Motivation:</strong> ${morgan.antagonist.motivation}</p>
+                    <p><strong>Koppling till Protagonist:</strong> ${morgan.antagonist.connection}</p>
+                    <p><strong>Sympatisk Sida:</strong> ${morgan.antagonist.sympathy}</p>
+                </div>
+            `;
+
+            // Display River's output
+            const river = projectData.agentWork.river.output;
+            document.getElementById('riverOutput').innerHTML = `
+                <div class="output-item">
+                    <h3>Huvudplats</h3>
+                    <p><strong>Plats:</strong> ${river.primarySetting.location}</p>
+                    <p><strong>Atmosfär:</strong> ${river.primarySetting.atmosphere}</p>
+                    <p><strong>Betydelse:</strong> ${river.primarySetting.significance}</p>
+                    <p><strong>Årstid:</strong> ${river.primarySetting.season}</p>
+                    <p><strong>Tidsspann:</strong> ${river.primarySetting.timespan}</p>
+                </div>
+            `;
+
+            // Display Quinn's output
+            const quinn = projectData.agentWork.quinn.output;
+            document.getElementById('quinnOutput').innerHTML = `
+                <div class="output-item">
+                    <h3>Narrativ Röst</h3>
+                    <p><strong>POV:</strong> ${quinn.narrativeVoice.pov}</p>
+                    <p><strong>Tempus:</strong> ${quinn.narrativeVoice.tense}</p>
+                    <p><strong>Ton:</strong> ${quinn.narrativeVoice.tone}</p>
+                    <p><strong>Stil:</strong> ${quinn.narrativeVoice.style}</p>
+                </div>
+                <div class="output-item">
+                    <h3>Karaktärsröster</h3>
+                    <p><strong>Protagonist:</strong> ${quinn.characterVoices.protagonist}</p>
+                    <p><strong>Antagonist:</strong> ${quinn.characterVoices.antagonist}</p>
+                </div>
+            `;
+        }
+
+        function approveAll() {
+            if (confirm('Godkänna alla agent-förslag och fortsätta till nästa fas?')) {
+                NOIR.ui.showLoading(true);
+                // Here we would submit approval
+                // For now, redirect to dashboard
+                setTimeout(() => {
+                    window.location.href = `../../books/${projectName}/dashboard.html`;
+                }, 1000);
+            }
+        }
+
+        function requestRevisions() {
+            alert('Revisions-funktionalitet kommer snart! För nu, redigera direkt i dashboard eller börja om.');
+        }
+
+        function startOver() {
+            if (confirm('Är du säker på att du vill börja om från början?')) {
+                window.location.href = 'plot-brief.html';
+            }
+        }
+
+        // Load data on page load
+        loadProjectData();
+    </script>
+</body>
+</html>
